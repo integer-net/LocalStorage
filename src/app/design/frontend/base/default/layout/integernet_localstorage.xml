@@ -1,0 +1,13 @@
+<layout>
+    <default>
+        <reference name="head">
+            <action method="addJs"><script>integernet_localstorage/localstorage.js</script></action>
+        </reference>
+        <reference name="before_body_end">
+            <block name="integernet_localstorage" type="core/text_list">
+                <block name="integernet_localstorage_html" type="integernet_localstorage/html" />
+                <block name="integernet_localstorage_js_inline" type="core/template" template="integernet_localstorage/js.phtml" />
+            </block>
+        </reference>
+    </default>
+</layout>

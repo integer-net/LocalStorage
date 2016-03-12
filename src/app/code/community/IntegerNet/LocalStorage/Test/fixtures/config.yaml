@@ -1,0 +1,2 @@
+config:
+  default/system/external_page_cache/enabled: 0

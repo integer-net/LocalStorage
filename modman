@@ -1,0 +1,6 @@
+src/app/code/community/IntegerNet/LocalStorage app/code/community/IntegerNet/LocalStorage
+src/app/design/frontend/base/default/layout/integernet_localstorage.xml app/design/frontend/base/default/layout/integernet_localstorage.xml
+src/app/design/frontend/base/default/template/integernet_localstorage app/design/frontend/base/default/template/integernet_localstorage
+src/app/etc/modules/IntegerNet_LocalStorage.xml app/etc/modules/IntegerNet_LocalStorage.xml
+src/js/integernet_localstorage js/integernet_localstorage
+src/lib/IntegerNet/LocalStorage lib/IntegerNet/LocalStorage

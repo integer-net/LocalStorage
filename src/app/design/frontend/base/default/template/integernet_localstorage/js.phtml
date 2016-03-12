@@ -1,0 +1,19 @@
+<?php
+/**
+ * integer_net Magento Module
+ *
+ * @category   IntegerNet
+ * @package    IntegerNet_LocalStorage
+ * @copyright  Copyright (c) 2016 integer_net GmbH (http://www.integer-net.de/)
+ * @author     Fabian Schmengler <fs@integer-net.de>
+ */
+/** @var $this Mage_Core_Block_Template */
+?>
+<script type="text/javascript">
+    (function(window) {
+        var storage = new window.IntegernetLocalstorage();
+        storage.saveElements($$('.integernet-localstorage-html'));
+        storage.moveFromCookie();
+        storage.callCallbacks();
+    })(window);
+</script>
