@@ -1,6 +1,7 @@
 <layout>
     <default>
         <reference name="head">
+            <action method="addJs"><script>integernet_localstorage/cookies.js</script></action>
             <action method="addJs"><script>integernet_localstorage/localstorage.js</script></action>
         </reference>
         <reference name="before_body_end">

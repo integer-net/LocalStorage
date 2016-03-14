@@ -23,7 +23,7 @@
         initialize: function() {
             this.updatedKeys = {};
             if (this.isAvailable()) {
-                this.localStorage = window.localStorage;
+                this.localStorage = window.sessionStorage;
             } else {
                 this.localStorage = {
                     'key': function() {},
@@ -35,7 +35,7 @@
             }
         },
         isAvailable: function() {
-            return typeof window.localStorage != 'undefined';
+            return typeof window.sessionStorage != 'undefined';
         },
         get: function(key) {
             key = this.prefix + key;
@@ -48,8 +48,6 @@
             this.localStorage.setItem(key, JSON.stringify(value));
         },
         hasChanged: function(key) {
-            console.log(this.updatedKeys);
-            console.log(this.updatedKeys[key]);
             return typeof this.updatedKeys[key] != 'undefined';
         },
         /**
@@ -87,13 +85,24 @@
          */
         moveFromCookie: function() {
             var cookieJson = cookies.get('integernet_localstorage');
+            var i = 0;
+            do {
+                var nextPart = cookies.get('integernet_localstorage.' + (++i))
+                if (nextPart !== null) {
+                    cookieJson += nextPart;
+                }
+            } while(nextPart !== null);
             if (cookieJson) {
+                console.log(cookieJson);
                 var cookieData = JSON.parse(cookieJson);
                 for (var i=0; i < cookieData.length; ++i) {
                     this.set(cookieData[i].key, b64_to_utf8(cookieData[i].value));
                 }
             }
             cookies.clear('integernet_localstorage');
+            for (var k = i; k > 0; k--) {
+                cookies.clear('integernet_localstorage.' + k);
+            }
         },
         callCallbacks: function() {
             var storage = this;

@@ -10,17 +10,25 @@
 class IntegerNet_LocalStorage_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
 {
     /**
+     * @var IntegerNet_LocalStorage_Helper_Data
+     */
+    private $helper;
+
+    protected function setUp()
+    {
+        $this->helper = Mage::helper('integernet_localstorage');
+    }
+    /**
      * @test
      * @helper integernet_localstorage
      */
     public function shouldReturnGlobalInstance()
     {
-        /** @var IntegerNet_LocalStorage_Helper_Data $helper */
-        $helper = Mage::helper('integernet_localstorage');
-        $localStorage = $helper->getLocalStorage();
+        $localStorage = $this->helper->getLocalStorage();
         $this->assertInstanceOf(IntegerNet_LocalStorage_LocalStorage::class, $localStorage);
 
-        $localStorageAgain = $helper->getLocalStorage();
+        $localStorageAgain = $this->helper->getLocalStorage();
         $this->assertSame($localStorage, $localStorageAgain, 'subsequent call should return same instance');
     }
+
 }

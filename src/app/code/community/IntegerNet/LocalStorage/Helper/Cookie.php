@@ -10,6 +10,11 @@
 class IntegerNet_LocalStorage_Helper_Cookie implements IntegerNet_LocalStorage_CookieSetter
 {
     /**
+     * Maximum cookie length is 4096 bytes, we reserve 96 bytes for overhead
+     */
+    const SPLIT_LENGTH = 4000;
+
+    /**
      * Set cookie with default configuration for path, domain and lifetime
      *
      * @param IntegerNet_LocalStorage_Cookie $cookie
@@ -17,7 +22,13 @@ class IntegerNet_LocalStorage_Helper_Cookie implements IntegerNet_LocalStorage_C
      */
     public function set(IntegerNet_LocalStorage_Cookie $cookie)
     {
-        Mage::getSingleton('core/cookie')->set($cookie->getName(), $cookie->getValue());
+        $splitValues = str_split($cookie->getValue(), self::SPLIT_LENGTH);
+        $suffix = '';
+        $i = 0;
+        foreach ($splitValues as $splitValue) {
+            Mage::getSingleton('core/cookie')->set($cookie->getName() . $suffix, $splitValue);
+            $suffix = '.' . (++$i);
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-window.localStorage.clear();
+window.sessionStorage.clear();
 QUnit.module("Features");
 QUnit.test("Instantiation", function(assert) {
     assert.ok(window.IntegernetLocalstorage instanceof Function, "window.IntegernetLocalstorage exists!" );
@@ -23,11 +23,20 @@ QUnit.test("Save from HTML", function(assert) {
 QUnit.test("Save from Cookie", function(assert) {
     var storage = new window.IntegernetLocalstorage();
     var expectedHtml = '<div id="cart">Updated Shopping Cart (möp)</div>';
-    document.cookie = "integernet_localstorage=[{\"key\":\"cart\",\"value\":\"PGRpdiBpZD0iY2FydCI+VXBkYXRlZCBTaG9wcGluZyBDYXJ0IChtw7ZwKTwvZGl2Pg==\"}]";
+    Mage.Cookies.set("integernet_localstorage","[{\"key\":\"cart\",\"value\":\"PGRpdiBpZD0iY2FydCI+VXBkYXRlZCBTaG9wcGluZyBDYXJ0IChtw7ZwKTwvZGl2Pg==\"}]");
     storage.moveFromCookie();
     assert.equal(storage.get('cart'), expectedHtml, "base64 decoded cookie value should be saved")
     assert.equal(document.cookie.indexOf('integernet_localstorage'), -1, 'Cookie deleted after saving');
 
+});
+QUnit.test("Save from split Cookies", function(assert) {
+    var storage = new window.IntegernetLocalstorage();
+    var expectedHtml = '<div id="cart">Updated Shopping Cart (möp)</div>';
+    Mage.Cookies.set("integernet_localstorage","[{\"key\":\"cart\",\"value\":\"PGRpdiBpZD0iY2FydCI+VXBkYXRlZCBTaG9wcGluZyBD");
+    Mage.Cookies.set("integernet_localstorage.1", "YXJ0IChtw7ZwKTwvZGl2Pg==\"}]");
+    storage.moveFromCookie();
+    assert.equal(storage.get('cart'), expectedHtml, "base64 decoded cookie value should be saved")
+    assert.equal(document.cookie.indexOf('integernet_localstorage'), -1, 'Cookie deleted after saving');
 });
 QUnit.test("Detect new values", function(assert) {
     var storage = new window.IntegernetLocalstorage();
@@ -57,14 +66,14 @@ QUnit.test("Call callbacks", function(assert) {
 QUnit.module("Error handling");
 //TODO possible fallback: use the cookie and don't dismiss it
 QUnit.test("Graceful Degradation", function(assert) {
-    var _localStorage = window.localStorage;
-    delete window.localStorage;
+    var _localStorage = window.sessionStorage;
+    delete window.sessionStorage;
 
     var storage = new window.IntegernetLocalstorage();
-    assert.ok(typeof window.localStorage == 'undefined', 'Emulate shitty browser.');
+    assert.ok(typeof window.sessionStorage == 'undefined', 'Emulate shitty browser.');
     assert.notOk(storage.isAvailable(), "isAvailable() returns false.");
     storage.set('some-key', 'Some string');
     assert.ok(storage.get('some-key') == null, 'get() and set() do nothing if local storage not available.');
 
-    window.localStorage = _localStorage;
+    window.sessionStorage = _localStorage;
 });
