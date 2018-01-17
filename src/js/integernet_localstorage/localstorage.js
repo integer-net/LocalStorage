@@ -84,24 +84,30 @@
          *  where the values are base64 encoded strings.
          */
         moveFromCookie: function() {
-            var cookieJson = cookies.get('integernet_localstorage');
-            var i = 0;
-            do {
-                var nextPart = cookies.get('integernet_localstorage.' + (++i))
-                if (nextPart !== null) {
-                    cookieJson += nextPart;
-                }
-            } while(nextPart !== null);
-            if (cookieJson) {
-                console.log(cookieJson);
-                var cookieData = JSON.parse(cookieJson);
-                for (var i=0; i < cookieData.length; ++i) {
-                    this.set(cookieData[i].key, b64_to_utf8(cookieData[i].value));
-                }
+            try {
+                var cookieJson = cookies.get('integernet_localstorage');
+                var i = 0;
+                do {
+                    var nextPart = cookies.get('integernet_localstorage.' + (++i))
+                    if (nextPart !== null) {
+                        cookieJson += nextPart;
+                    }
+                } while(nextPart !== null);
+                if (cookieJson) {
+                    console.log(cookieJson);
+                    var cookieData = JSON.parse(cookieJson);
+                    for (var i=0; i < cookieData.length; ++i) {
+                        this.set(cookieData[i].key, b64_to_utf8(cookieData[i].value));
+                    }
+                }            }
+            catch(err) {
+                console.log('Error while parsing cookie for localstorage');
             }
-            cookies.clear('integernet_localstorage');
-            for (var k = i; k > 0; k--) {
-                cookies.clear('integernet_localstorage.' + k);
+            finally {
+                cookies.clear('integernet_localstorage');
+                for (var k = i; k > 0; k--) {
+                    cookies.clear('integernet_localstorage.' + k);
+                }
             }
         },
         callCallbacks: function() {
