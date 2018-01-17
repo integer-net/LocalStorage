@@ -61,6 +61,12 @@ HTML;
      */
     public function sendCookie()
     {
+        foreach (Mage::getModel('core/cookie')->get() as $cookieName => $cookieValue) {
+            if (strpos($cookieName, IntegerNet_LocalStorage_TransportCookie::TRANSPORT_COOKIE_NAME) !== false) {
+                Mage::getModel('core/cookie')->delete($cookieName);
+            }
+        }
+
         if ($this->cookieItems) {
             $transportCookie = new IntegerNet_LocalStorage_TransportCookie($this->cookieItems);
             $this->cookieSetter->set($transportCookie);
